@@ -315,7 +315,7 @@ pub fn execute_default(args: &Cli) -> Result<(), Box<dyn error::Error>> {
         env!("CARGO_MANIFEST_DIR"),
         "/template/src/main.rs.tpl"
     ))
-    .replace("{CRATE_SLUG}", &pm.slug)
+    .replace("{CRATE_SLUG}", &pm.lib_name.unwrap_or(pm.slug))
     .replace("{YEAR}", &day_parts.year.to_string())
     .replace("{INPUT}", &template_input(day, year, args.input.as_deref()))
     .replace("{BODY}", &body);
@@ -509,7 +509,7 @@ pub fn execute_bench(args: &Bench) -> Result<(), Box<dyn error::Error>> {
     download_input(date)?;
 
     let main_content = bench_tpl
-        .replace("{CRATE_SLUG}", &pm.slug)
+        .replace("{CRATE_SLUG}", &pm.lib_name.unwrap_or(pm.slug))
         .replace("{PARTS}", &body)
         .replace("{GENS}", &gens)
         .replace(

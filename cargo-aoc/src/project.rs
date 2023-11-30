@@ -9,6 +9,7 @@ pub struct ProjectManager {
     pub name: String,
     pub slug: String,
     pub lib_path: Option<String>,
+    pub lib_name: Option<String>,
 }
 
 impl ProjectManager {
@@ -32,10 +33,18 @@ impl ProjectManager {
             .and_then(|lib_path| lib_path.as_str())
             .map(String::from);
 
+        let lib_name = cargo
+            .get("lib")
+            .and_then(|lib| lib.get("name"))
+            .and_then(|lib_name| lib_name.as_str())
+            .map(String::from)
+            .map(|lib_name| lib_name.replace('-', "_"));
+
         Ok(ProjectManager {
             name: crate_name,
             slug: crate_slug,
             lib_path,
+            lib_name,
         })
     }
 
