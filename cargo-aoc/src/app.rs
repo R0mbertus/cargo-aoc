@@ -42,7 +42,7 @@ pub fn execute_credentials(args: &Credentials) {
 pub fn execute_input(args: &Input) -> Result<(), Box<dyn Error>> {
     // Gets the token or exit if it's not referenced.
     let token = CredentialsManager::new().get_session_token().expect(
-        "Error: you need to setup your AOC token using \"cargo aoc credentials -s {token}\"",
+        "Error: you need to setup your AOC token using \"cargo aoc credentials {token}\"",
     );
 
     let pm = ProjectManager::new()?;
@@ -116,7 +116,7 @@ pub fn execute_input(args: &Input) -> Result<(), Box<dyn Error>> {
 }
 
 fn update_lib_rs(day: u32, pm: &ProjectManager) -> Result<(), Box<dyn Error>> {
-    let lib_rs_path = dbg!(Path::new(pm.lib_path.as_deref().unwrap_or("src/lib.rs")));
+    let lib_rs_path = Path::new(pm.lib_path.as_deref().unwrap_or("src/lib.rs"));
     if !lib_rs_path.exists() {
         Err("lib.rs does not exist!")?
     }
@@ -463,6 +463,7 @@ pub fn execute_bench(args: &Bench) -> Result<(), Box<dyn error::Error>> {
                 gen_tpl
                     .replace("{GEN_NAME}", &gen_name)
                     .replace("{DAY}", &day.0.to_string())
+                    .replace("{PART}", &p.0.to_string())
                     .replace(
                         "{IMPLS}",
                         &matching_parts
